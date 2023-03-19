@@ -1,0 +1,42 @@
+aws:
+  access: "test" # aws access key
+  secret: "test" # aws secret key
+  region: "us-east-1"
+  endpoint: "http://localhost:4566" # optional - use it if you want to test with localstack
+
+projects:
+  - name: "sqrl"
+    environments:
+      - name: "local"
+        variables:
+          - key: "NODE_ENV"
+            value: "development"
+            overwrite: true # optional - this will overwrite the value if it already exists
+          - key: "PORT"
+            value: 9000
+            overwrite: true
+      - name: "testing"
+        variables:
+          - key: "NODE_ENV"
+            value: "testing"
+          - key: "PORT"
+            value: 9000
+            overwrite: true
+      - name: "production"
+        variables:
+          - key: "NODE_ENV"
+            value: "production"
+            secure: true # optional - this will set the variable type to SecureString
+          - key: "PORT"
+            value: 9000
+            overwrite: true
+  - name: "mrg"
+    environments:
+      - name: "production"
+        variables:
+          - key: "NODE_ENV"
+            value: "production"
+            secure: true
+          - key: "PORT"
+            value: 9000
+            overwrite: true
