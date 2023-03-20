@@ -22,7 +22,8 @@ func runApplyCommand(cmd *cobra.Command, args []string) {
 	client := api.CreateSsmClient(c.Aws)
 
 	for _, project := range c.Projects {
-		api.AddProjectVariables(client, project)
+		err := api.AddProjectVariables(client, project)
+		utils.CheckError(err)
 	}
 }
 

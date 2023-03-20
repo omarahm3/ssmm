@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
@@ -24,7 +25,7 @@ func AddProjectVariables(client *ssm.Client, project config.Project) error {
 
 	for _, env := range project.Environments {
 		for _, variable := range env.Variables {
-			variablePath := fmt.Sprintf("%s/%s/%s", project.Name, env.Name, variable.Key)
+			variablePath := fmt.Sprintf("/%s/%s/%s", project.Name, env.Name, variable.Key)
 			variableType := types.ParameterTypeString
 
 			if variable.Secure {
@@ -43,8 +44,13 @@ func AddProjectVariables(client *ssm.Client, project config.Project) error {
 	for _, param := range parameters {
 		fmt.Printf("> adding new variable [ %s ] with value [ %s ]\n", *param.Name, *param.Value)
 		_, err := client.PutParameter(context.Background(), param)
-		if err != nil && err.Error() != "ParameterAlreadyExists" {
+		if err != nil && strings.Contains(err.Error(), "ParameterAlreadyExists") {
 			fmt.Printf("X> parameter [ %s ] already exists, ignoring...\n", *param.Name)
+			continue
+		}
+
+		if err != nil {
+			return err
 		}
 	}
 
