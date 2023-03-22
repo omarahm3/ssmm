@@ -20,6 +20,29 @@ func Play(client *ssm.Client) {
 	fmt.Println(out.Parameters)
 }
 
+func GetAllParameters(client *ssm.Client) ([]types.ParameterMetadata, error) {
+	var parameters []types.ParameterMetadata
+
+	out, err := client.DescribeParameters(context.Background(), &ssm.DescribeParametersInput{})
+	if err != nil {
+		return nil, err
+	}
+
+	parameters = append(parameters, out.Parameters...)
+
+	for out.NextToken != nil {
+		out, err = client.DescribeParameters(context.Background(), &ssm.DescribeParametersInput{
+			NextToken: out.NextToken,
+		})
+		if err != nil {
+			return nil, err
+		}
+		parameters = append(parameters, out.Parameters...)
+	}
+
+	return parameters, nil
+}
+
 func AddProjectVariables(client *ssm.Client, project config.Project) error {
 	var parameters []*ssm.PutParameterInput
 

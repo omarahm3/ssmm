@@ -1,11 +1,9 @@
 package cmd
 
 import (
-	"context"
 	"fmt"
 	"strings"
 
-	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/aws/aws-sdk-go-v2/service/ssm/types"
 	"github.com/omarahm3/ssmm/pkg/api"
 	"github.com/omarahm3/ssmm/pkg/utils"
@@ -23,10 +21,10 @@ var (
 func runListCommand(cmd *cobra.Command, args []string) {
 	client := api.CreateSsmClient(ssmConfig.Aws)
 
-	out, err := client.DescribeParameters(context.Background(), &ssm.DescribeParametersInput{})
+	parameters, err := api.GetAllParameters(client)
 	utils.CheckError(err)
 
-	for i, parameter := range out.Parameters {
+	for i, parameter := range parameters {
 		printParameter(i, parameter)
 	}
 }
