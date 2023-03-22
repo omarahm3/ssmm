@@ -21,7 +21,7 @@ will result in the following parameter:
 ```json
 {
     "Name": "/sqrl/local/NODE_ENV",
-    "Type": "String",
+    "Type": "SecureString",
     "LastModifiedDate": 1679338581.762,
     "LastModifiedUser": "N/A",
     "Version": 6,
