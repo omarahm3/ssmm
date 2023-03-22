@@ -13,7 +13,7 @@ projects:
           - key: "NODE_ENV"
             value: "development"
             overwrite: true
-            securet: true
+            secure: true
 ```
 
 will result in the following parameter:
