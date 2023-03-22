@@ -2,7 +2,6 @@ package config
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/jinzhu/configor"
@@ -75,15 +74,15 @@ func loadEnvVars() error {
 	endpoint := os.Getenv("AWS_ENDPOINT")
 
 	if access == "" && config.Aws.Access == "" {
-		return fmt.Errorf("either AWS_ACCESS_KEY_ID or aws.access is required")
+		return errors.New("either AWS_ACCESS_KEY_ID or aws.access is required")
 	}
 
 	if secret == "" && config.Aws.Secret == "" {
-		return fmt.Errorf("either AWS_SECRET_ACCESS_KEY or aws.secret is required")
+		return errors.New("either AWS_SECRET_ACCESS_KEY or aws.secret is required")
 	}
 
 	if region == "" && config.Aws.Region == "" {
-		return fmt.Errorf("either AWS_DEFAULT_REGION or aws.region is required")
+		return errors.New("either AWS_DEFAULT_REGION or aws.region is required")
 	}
 
 	if access != "" {
