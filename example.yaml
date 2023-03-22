@@ -1,7 +1,7 @@
-aws:
-  access: "test" # aws access key
-  secret: "test" # aws secret key
-  region: "us-east-1"
+aws: # optional
+  access: "test" #  optional - aws access key or AWS_ACCESS_KEY_ID
+  secret: "test" # optional - aws secret key or AWS_SECRET_ACCESS_KEY
+  region: "us-east-1" # optional - aws region or AWS_DEFAULT_REGION
   endpoint: "http://localhost:4566" # optional - use it if you want to test with localstack
 
 projects:
