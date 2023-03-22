@@ -18,9 +18,9 @@ var (
 )
 
 type AwsConfig struct {
-	Access   string `required:"true"`
-	Secret   string `required:"true"`
-	Region   string `required:"true"`
+	Access   string
+	Secret   string
+	Region   string
 	Endpoint string
 }
 
@@ -40,7 +40,7 @@ type Project struct {
 }
 
 type Config struct {
-	Aws      AwsConfig `required:"true"`
+	Aws      AwsConfig
 	Projects []Project `required:"true"`
 }
 
@@ -59,5 +59,47 @@ func load(p string) (*Config, error) {
 		return nil, err
 	}
 
+	err = loadEnvVars()
+	if err != nil {
+		return nil, err
+	}
+
 	return &config, nil
+}
+
+func loadEnvVars() error {
+	access := os.Getenv("AWS_ACCESS_KEY_ID")
+	secret := os.Getenv("AWS_SECRET_ACCESS_KEY")
+	region := os.Getenv("AWS_DEFAULT_REGION")
+	endpoint := os.Getenv("AWS_ENDPOINT")
+
+	if access == "" && config.Aws.Access == "" {
+		return errors.New("either AWS_ACCESS_KEY_ID or aws.access is required")
+	}
+
+	if secret == "" && config.Aws.Secret == "" {
+		return errors.New("either AWS_SECRET_ACCESS_KEY or aws.secret is required")
+	}
+
+	if region == "" && config.Aws.Region == "" {
+		return errors.New("either AWS_DEFAULT_REGION or aws.region is required")
+	}
+
+	if access != "" {
+		config.Aws.Access = access
+	}
+
+	if secret != "" {
+		config.Aws.Secret = secret
+	}
+
+	if region != "" {
+		config.Aws.Region = region
+	}
+
+	if endpoint != "" {
+		config.Aws.Endpoint = endpoint
+	}
+
+	return nil
 }
